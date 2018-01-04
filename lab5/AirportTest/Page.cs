@@ -64,6 +64,15 @@ namespace AirportTest
         [FindsBy(How = How.XPath, Using = "//a[@data-bind='click: $root.executeMultiCityFlightSearch']")]
         private IWebElement multiCitySearch;
 
+        [FindsBy(How = How.XPath, Using = "//a[@class='fw700 fs-16 bold']")]
+        private IWebElement exploreLink;
+
+        [FindsBy(How = How.XPath, Using = "//a[@href='#bookerDeparTab']")]
+        private IWebElement flightStatusButton;
+
+        [FindsBy(How = How.Id, Using = "membershipNumber")]
+        private IWebElement inputMembershipNumber;
+
         public Page()
         {
             driver = new ChromeDriver(DriverPath);
@@ -282,10 +291,50 @@ namespace AirportTest
 
         public void TestCase7()
         {
-
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
+            driver.Navigate().GoToUrl(BaseUrl);
+            Thread.Sleep(10000);
+            exploreLink.Click();
+            Thread.Sleep(10000);
+            wait.Until(ExpectedConditions.ElementToBeClickable(buttonInputFrom)).Click();
+            inputFrom.SendKeys("msq");
+            var selectedAirport = driver.FindElement(By.XPath("//button[@aria-label='Click to find departure point.']/..//ul/li[@rel='1']/a"));
+            var action = new Actions(driver);
+            action.MoveToElement(selectedAirport, 1, 1).Build().Perform();
+            action.Click().Perform();
+            Thread.Sleep(5000);
+            wait.Until(ExpectedConditions.ElementToBeClickable(buttonInputTo)).Click();
+            wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//button[@aria-label='Click to find destination.']/..//input")));
+            inputTo.SendKeys("lgw");
+            var toAirport = driver.FindElement(By.XPath("//button[@aria-label='Click to find destination.']/..//ul/li[@rel='1']/a"));
+            var action2 = new Actions(driver);
+            action2.MoveToElement(toAirport, 1, 1).Build().Perform();
+            action2.Click().Perform();
+            var searchFlightButton = driver.FindElement(By.XPath("//a[@data-bind='click: searchFlight']"));
+            searchFlightButton.Click();
         }
 
+        public void TestCase8()
+        {
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
+            driver.Navigate().GoToUrl(BaseUrl);
+            Thread.Sleep(10000);
+            exploreLink.Click();
+            Thread.Sleep(6000);
+            var firstCity = driver.FindElement(By.XPath("//div[@id='exploreourbestofferscarousel']//div[@class='carousel-caption']//a"));
+            firstCity.Click();
+        }
 
+        public void TestCase9()
+        {
+            driver.Navigate().GoToUrl(BaseUrl);
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(15));
+            Thread.Sleep(10000);
+            flightStatusButton.Click();
+            wait.Until(ExpectedConditions.ElementIsVisible(By.Id("membershipNumber"))).SendKeys("284");
+            var findFlight = driver.FindElement(By.XPath("//a[@data-bind='click : findFlights']"));
+            findFlight.Click();
+        }
 
         public void Dispose()
         {

@@ -70,5 +70,37 @@ namespace AirportTest
                 Thread.Sleep(5000);
             }
         }
+
+        [Test]
+        public void Test7()
+        {
+            using (var page = new Page())
+            {
+                page.TestCase7();
+                Thread.Sleep(5000);
+            }
+        }
+
+        [Test]
+        public void Test8()
+        {
+            using (var page = new Page())
+            {
+                page.TestCase8();
+                Thread.Sleep(10000);
+            }
+        }
+
+        [Test]
+        public void Test9()
+        {
+            using (var page = new Page())
+            {
+                page.TestCase9();
+                Thread.Sleep(5000);
+            }
+        }
+
+
     }
 }
